@@ -4,7 +4,8 @@ const express = require('express');
 const app = express();
 const posts = require('./routes/posts');
 const http = require('http').Server(app);
-var fs = require('fs');
+const fs = require('fs');
+const path = require('path')
 const mongoose = require('mongoose');
 const morgan = require('morgan');
  
