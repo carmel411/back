@@ -1,5 +1,6 @@
 const users = require('./routes/users');
 const auth = require('./routes/auth');
+const mails = require('./routes/mails');
 const express = require('express');
 const app = express();
 const posts = require('./routes/posts');
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use('/api/users', users);
 app.use('/api/auth', auth);
 app.use('/api/posts', posts);
+app.use('/api/posts', mails);
  
 const port = 3000;
 http.listen(port, () => console.log(`Listening on port ${port}...`));
