@@ -2,10 +2,19 @@ const express = require('express');
 const router = express.Router();
 const {User, validate } = require('../models/user');
 const { Post, validatePost, generatePostNumber } = require('../models/post');
-
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const auth = require('../middleware/auth');
+require('dotenv').config()
+var flash = require('connect-flash');
+var app = express();
+app.use(flash());
+// const process = require('process');
+
+var SibApiV3Sdk = require('sib-api-v3-sdk');
+SibApiV3Sdk.ApiClient.instance.authentications['api-key'].apiKey = process.env.SENDINBLUE_API_KEY;
+
+
 // get user info
 router.get('/me', auth, async (req, res) => {
     const user = await User.findById(req.user._id).select('-password');
@@ -92,5 +101,38 @@ else {
 }
 });
 
+//   forget password
+router.post('/forget', async (req, res) => {
+ let errorMessage = "";
+  const randomPassword = Math.random().toString(36).slice(-8);
+  const salt = await bcrypt.genSalt(10);
+  const bcryptPassword = await bcrypt.hash(randomPassword, salt);
+  const convertPassword = await User.findOneAndUpdate({"email":req.body.email},{"password": bcryptPassword},{ new: true });
+  var mailData = ""
+  new SibApiV3Sdk.TransactionalEmailsApi().sendTransacEmail({
 
+      "sender":{ "email":"not-reply@toreadandgrow.com", "name":"לקרוא ולצמוח"},
+      "subject":"איפוס סיסמא",
+      "htmlContent":`<!DOCTYPE html><html><body><h1>סיסמתך אופסה</h1><p>הסיסמה החדשה היא:</p><br><p>${randomPassword}</p></body></html>`,
+      "params":{
+         "greeting":"This is the default greeting",
+         "headline":"This is the default headline"
+      },
+      "to":[{"email": req.body.email}]
+  
+  }).then(function(data) {
+   console.log(data);
+  mailData = data;
+  }, function(error) {
+   console.error(error);
+   errorMessage = error;
+  });
+  
+  
+  
+  if (!convertPassword) res.status(400).send('איפוס הסיסמה נכשל' + " " + errorMessage);
+  res.status(200).send(mailData);
+  });
+
+  
 module.exports = router;

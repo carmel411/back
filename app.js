@@ -9,7 +9,8 @@ const fs = require('fs');
 const path = require('path')
 const mongoose = require('mongoose');
 const morgan = require('morgan');
- 
+var flash = require('connect-flash');
+
 mongoose.connect('mongodb://localhost/poster', {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -21,10 +22,11 @@ var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {
  
 app.use(morgan('combined', { stream: accessLogStream }));
 app.use(express.json());
+app.use(flash());
 app.use('/api/users', users);
 app.use('/api/auth', auth);
 app.use('/api/posts', posts);
-app.use('/api/posts', mails);
- 
+app.use('/api/mails', mails);
+
 const port = 3000;
 http.listen(port, () => console.log(`Listening on port ${port}...`));
