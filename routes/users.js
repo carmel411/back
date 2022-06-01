@@ -9,7 +9,6 @@ require('dotenv').config()
 var flash = require('connect-flash');
 var app = express();
 app.use(flash());
-// const process = require('process');
 
 var SibApiV3Sdk = require('sib-api-v3-sdk');
 SibApiV3Sdk.ApiClient.instance.authentications['api-key'].apiKey = process.env.SENDINBLUE_API_KEY;
@@ -101,6 +100,49 @@ else {
 }
 });
 
+  // update user
+   router.patch('/update', auth, async (req, res) => {
+    console.log(req.body)
+    const user = _.pick(req.body, ['name','phone','avatar', 'email', 'password', 'password2'])
+    console.log(user)
+    // TODO: validate only not empty fields
+    // const {error}=await validate(user)
+    // if (error){
+    // return res.status(400).send(error.details[0].message)
+    // }
+    // else {
+      // const userToSave = new User(user);
+      let updatedUser = await User.findById(req.user._id);
+      updatedUser.email = req.body.email;
+      updatedUser.phone = req.body.phone;
+      updatedUser.avatar = req.body.avatar;
+      if(req.body.password!=(""||null||undefined) && req.body.password===req.body.password2){
+        const salt = await bcrypt.genSalt(10);
+        let bcyptPassword = await bcrypt.hash(req.body.password, salt);
+        updatedUser.password = bcyptPassword};
+      updatedUser.name = req.body.name;
+      updatedUser.save().then(()=>{
+      let resInfo = (_.pick(updatedUser, ['_id', 'name', 'email']));
+
+      res.status(200).send(resInfo);
+      return
+      }).catch((err)=>{
+      return res.status(400).send(err)
+      
+      }) 
+}
+// }
+);
+   
+ 
+ 
+ 
+ 
+ 
+ 
+    
+
+
 //   forget password
 router.post('/forget', async (req, res) => {
  let errorMessage = "";
@@ -127,9 +169,6 @@ router.post('/forget', async (req, res) => {
    console.error(error);
    errorMessage = error;
   });
-  
-  
-  
   if (!convertPassword) res.status(400).send('איפוס הסיסמה נכשל' + " " + errorMessage);
   res.status(200).send(mailData);
   });

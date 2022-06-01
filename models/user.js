@@ -3,6 +3,15 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken')
 const config = require('config');
 const { string } = require('joi');
+const fs = require('fs');
+
+
+
+var base64avatar = base64_encode('images/default_avatar.jpg');
+function base64_encode(file) {
+  return "data:image/gif;base64,"+fs.readFileSync(file, 'base64');
+}  
+
 
 const userSchema = new mongoose.Schema({
 name: {
@@ -13,7 +22,7 @@ maxlength: 255
 },
 phone: {
   type: String,
-  required: true,
+  required: false,
   minlength: 2,
   maxlength: 255
   },
@@ -33,17 +42,19 @@ maxlength: 1024
 },
 admin: {
 type: Boolean,
-required: true
+required: true,
+default: false
 },
 avatar: {
   type: String,
-  required: true,
+  required: false,
   minlength: 6,
-  maxlength: 1024
+  maxlength: 1000000,
+  default: base64avatar
   },
 createdAt: { type: Date, default: Date.now }
-// ,
-// posts: Array
+,
+posts: Array
 
 });
 
@@ -57,23 +68,23 @@ const User = mongoose.model('User', userSchema);
 function validateUser(user) {
 const schema = Joi.object({
 name: Joi.string().min(2).max(255).required(),
-phone: Joi.string().min(2).max(255).required(),
+phone: Joi.string().min(2).max(255),
 email: Joi.string().min(6).max(255).required().email(),
 password: Joi.string().min(6).max(1024).required(),
 admin: Joi.boolean().required(),
-avatar: Joi.string().min(6).max(1024).required()
+avatar: Joi.string().min(6).max(1000000)
 });
 return schema.validate(user);
 }
 
-// function validatePosts(data) {
+function validatePosts(data) {
  
-//   const schema = Joi.object({
-//     posts: Joi.array().min(1)
-//   });
+  const schema = Joi.object({
+    posts: Joi.array().min(1)
+  });
  
-//   return schema.validate(data);
-// }
+  return schema.validate(data);
+}
 
 exports.User = User;
 exports.validate = validateUser;
