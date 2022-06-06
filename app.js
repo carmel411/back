@@ -11,8 +11,10 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 var flash = require('connect-flash');
 
-mongoose.connect('mongodb://localhost/poster', {
-  useNewUrlParser: true,
+mongoose.connect(
+  // 'mongodb://localhost/poster', 
+  process.env.MONGODB_URI,
+  {useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => console.log('Connected to MongoDB...'))
   .catch(err => console.error('Could not connect to MongoDB...'));
