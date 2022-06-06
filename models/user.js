@@ -40,7 +40,7 @@ required: true,
 minlength: 6,
 maxlength: 1024
 },
-admin: {
+userStatus: {
 type: Boolean,
 required: true,
 default: false
@@ -49,7 +49,7 @@ avatar: {
   type: String,
   required: false,
   minlength: 6,
-  maxlength: 1000000,
+  maxlength: 100000000,
   default: base64avatar
   },
 createdAt: { type: Date, default: Date.now }
@@ -58,8 +58,50 @@ posts: Array
 
 });
 
+
+
+const userSchemaWithoutPassword = new mongoose.Schema({
+  name: {
+  type: String,
+  required: true,
+  minlength: 2,
+  maxlength: 255
+  },
+  phone: {
+    type: String,
+    required: false,
+    minlength: 2,
+    maxlength: 255
+    },
+    
+  email: {
+  type: String,
+  required: true,
+  minlength: 6,
+  maxlength: 255,
+  unique: true
+  },
+  userStatus: {
+  type: Boolean,
+  required: true,
+  default: false
+  },
+  avatar: {
+    type: String,
+    required: false,
+    minlength: 6,
+    maxlength: 100000000,
+    default: base64avatar
+    },
+  posts: Array
+  
+  });
+  
+
+
+
 userSchema.methods.generateAuthToken = function () {
-    const token = jwt.sign({ _id: this._id, admin: this.admin }, config.get('jwtKey'));
+    const token = jwt.sign({ _id: this._id, userStatus: this.userStatus }, config.get('jwtKey'));
     return token;
   }
 
@@ -71,8 +113,8 @@ name: Joi.string().min(2).max(255).required(),
 phone: Joi.string().min(2).max(255),
 email: Joi.string().min(6).max(255).required().email(),
 password: Joi.string().min(6).max(1024).required(),
-admin: Joi.boolean().required(),
-avatar: Joi.string().min(6).max(1000000)
+userStatus: Joi.boolean().required(),
+avatar: Joi.string().min(6).max(100000000)
 });
 return schema.validate(user);
 }

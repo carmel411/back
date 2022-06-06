@@ -5,14 +5,14 @@ const auth = require('../middleware/auth');
 const router = express.Router();
 // delete post
 router.delete('/:id', auth, async (req, res) => {
-  // if (!req.user.admin) return res.status(403).send('You need admin pemission to perform this action.');
+  // if (!req.user.userStatus) return res.status(403).send('You need userStatus pemission to perform this action.');
   const post = await Post.findOneAndRemove({ _id: req.params.id, user_id: req.user._id });
   if (!post) return res.status(404).send('The post with the given ID was not found.');
   res.send(post);
 });
 // edit post
 router.put('/:id', auth, async (req, res) => {
-  // if (!req.user.admin) return res.status(403).send('You need admin pemission to perform this action.');
+  // if (!req.user.userStatus) return res.status(403).send('You need userStatus pemission to perform this action.');
   const { error } = validatePost(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   let post = await Post.findOneAndUpdate({ _id: req.params.id, user_id: req.user._id }, req.body);
@@ -34,7 +34,7 @@ router.get('/', auth, async (req, res) => {
   });
 // create post
 router.post('/', auth, async (req, res) => {
-  // if (!req.user.admin) return res.status(403).send('You need admin pemission to perform this action.');
+  // if (!req.user.userStatus) return res.status(403).send('You need userStatus pemission to perform this action.');
 
   const { error } = validatePost(req.body);
     if (error) return res.status(400).send(error.details[0].message);

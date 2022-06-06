@@ -59,7 +59,7 @@ router.get('/posts', auth, async (req, res) => {
 
 // update user posts list
 router.patch('/posts', auth, async (req, res) => {
- console.log(req.body.posts);
+//  console.log(req.body.posts);
   const { error } = validatePosts(req.body);
   if (error) res.status(400).send(error.details[0].message);
  
@@ -77,7 +77,7 @@ router.patch('/posts', auth, async (req, res) => {
   // register
 router.post('/', async (req, res) => {
 console.log("Someone `try to register");
-const user = _.pick(req.body, ['name', 'email', 'password', 'admin', 'posts'])
+const user = _.pick(req.body, ['name', 'email', 'password', 'userStatus', 'posts'])
 const {error}=await validate(user)
 if (error){
 return res.status(400).send(error.details[0].message)
@@ -102,9 +102,9 @@ else {
 
   // update user
    router.patch('/update', auth, async (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     const user = _.pick(req.body, ['name','phone','avatar', 'email', 'password', 'password2'])
-    console.log(user)
+    // console.log(user)
     // TODO: validate only not empty fields
     // const {error}=await validate(user)
     // if (error){
