@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {User, validate } = require('../models/user');
+const {User, validate, validateUserWithoutPassword } = require('../models/user');
 const { Post, validatePost, generatePostNumber } = require('../models/post');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
@@ -102,16 +102,14 @@ else {
 
   // update user
    router.patch('/update', auth, async (req, res) => {
-    // console.log(req.body)
     const user = _.pick(req.body, ['name','phone','avatar', 'email', 'password', 'password2'])
-    // console.log(user)
-    // TODO: validate only not empty fields
-    // const {error}=await validate(user)
-    // if (error){
-    // return res.status(400).send(error.details[0].message)
-    // }
-    // else {
-      // const userToSave = new User(user);
+    if(req.body.password!=(""||null||undefined) && req.body.password===req.body.password2){const {error}=await validate(user)}
+    else{const {error}=await validateUserWithoutPassword(user)};
+    if (error){
+    return res.status(400).send(error.details[0].message)
+    }
+    else {
+      const userToSave = new User(user);
       let updatedUser = await User.findById(req.user._id);
       updatedUser.email = req.body.email;
       updatedUser.phone = req.body.phone;
@@ -129,10 +127,7 @@ else {
       }).catch((err)=>{
       return res.status(400).send(err)
       
-      }) 
-}
-// }
-);
+      })}});
    
  
  

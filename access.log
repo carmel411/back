@@ -1007,3 +1007,7 @@
 ::1 - - [06/Jun/2022:10:20:03 +0000] "PATCH /api/users/update HTTP/1.1" 200 86 "http://localhost:4200/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36"
 ::1 - - [06/Jun/2022:10:20:03 +0000] "OPTIONS /api/users/me HTTP/1.1" 200 8 "http://localhost:4200/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36"
 ::1 - - [06/Jun/2022:10:20:03 +0000] "GET /api/users/me HTTP/1.1" 200 55196 "http://localhost:4200/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36"
+::1 - - [06/Jun/2022:12:13:19 +0000] "OPTIONS /api/users/me HTTP/1.1" 200 8 "http://localhost:4200/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36"
+::1 - - [06/Jun/2022:12:13:19 +0000] "GET /api/users/me HTTP/1.1" 200 55192 "http://localhost:4200/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36"
+::1 - - [06/Jun/2022:18:45:56 +0000] "OPTIONS /api/users/me HTTP/1.1" 200 8 "http://localhost:4200/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36"
+::1 - - [06/Jun/2022:18:45:56 +0000] "GET /api/users/me HTTP/1.1" 304 - "http://localhost:4200/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36"

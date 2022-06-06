@@ -4,25 +4,34 @@ const _ = require('lodash');
 
 
 const postSchema = new mongoose.Schema({
-  postName: {
+  name: {
     type: String,
     required: true,
     minlength: 2,
     maxlength: 255
   },
-  postBody: {
+  body: {
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 2048
+    maxlength: 65536
   },
-  postColor: {
+  summary: {
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 10
+    maxlength: 255
   },
-  tags: Array,
+  author: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 32
+  },
+  tags: {
+    type: Array,
+    required: false
+  },
   postImage: {
     type: String,
     required: false,
@@ -33,24 +42,33 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 3,
-    maxlength: 999999999999,
+    maxlength: 9999999999,
     unique: true
   },
   user_id: {
     type: String,
     required: true,
     minlength: 1,
-    maxlength: 99999999999,
+    maxlength: 255,
+  },
+  views:{
+    type: Number,
+    required: true,
+    default: 0
   }
 });
 const Post = mongoose.model('Post', postSchema);
 
 function validatePost(post) {
   const schema = Joi.object({
-    postName: Joi.string().min(2).max(255).required(),
-    postBody: Joi.string().min(2).max(2048).required(),
+    name: Joi.string().min(2).max(255).required(),
+    summary: Joi.string().min(2).max(255).required(),
+    body: Joi.string().min(2).max(2048).required(),
+    author: Joi.string().min(2).max(32).required(),
     postImage: Joi.string().min(11).max(1024),
-    postColor: Joi.string().min(2).max(10),
+    postNumber: Joi.string().min(3).max(9999999).required(),
+    user_id: Joi.string().min(1).max(255).required(),
+    views: Joi.number().required(),
     tags: Joi.array()
   });
   return schema.validate(post);

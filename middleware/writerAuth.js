@@ -8,7 +8,9 @@ module.exports = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, config.get('jwtKey'));
     req.user = decoded;
-    next();
+    
+    if(req.user.userStatus===0) return res.status(401).send("דרושה הרשאת כתיבה");
+    if(req.user.userStatus===1||req.user.userStatus===2)next();
   }
   catch (ex) {
     res.status(400).send('שגיאה באסימון');
