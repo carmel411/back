@@ -32,4 +32,7 @@ app.use('/api/posts', posts);
 app.use('/api/mails', mails);
 
 
-http.listen((process.env.PORT || 5000), () => console.log(`Listening...`));
+const PORT = process.env.PORT || 3001;
+http.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
