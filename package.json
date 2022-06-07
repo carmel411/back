@@ -10,7 +10,6 @@
   },
   "keywords": [],
   "author": "Elisha Carmel",
-
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
