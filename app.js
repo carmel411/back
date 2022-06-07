@@ -31,5 +31,5 @@ app.use('/api/auth', auth);
 app.use('/api/posts', posts);
 app.use('/api/mails', mails);
 
-const port = 3000;
-http.listen(port, () => console.log(`Listening on port ${port}...`));
+
+http.listen((process.env.PORT || 5000), () => console.log(`Listening on port ${port}...`));
