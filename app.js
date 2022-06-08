@@ -19,6 +19,11 @@ mongoose.connect(
 }).then(() => console.log('Connected to MongoDB...'))
   .catch(err => console.error('Could not connect to MongoDB...'));
 
+  router.get('/', function (req, res) {
+    res.send('server OK');
+  })
+  
+
 // create log file
 var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
  
