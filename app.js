@@ -2,6 +2,7 @@ const users = require('./routes/users');
 const auth = require('./routes/auth');
 const mails = require('./routes/mails');
 const express = require('express');
+var router = express.Router();
 const app = express();
 const posts = require('./routes/posts');
 const http = require('http').Server(app);
