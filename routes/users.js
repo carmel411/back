@@ -103,12 +103,13 @@ else {
   // update user
    router.patch('/update', auth, async (req, res) => {
     const user = _.pick(req.body, ['name','phone','avatar', 'email', 'password', 'password2'])
-    if(req.body.password!=(""||null||undefined) && req.body.password===req.body.password2){const {error}=await validate(user)}
-    else{const {error}=await validateUserWithoutPassword(user)};
-    if (error){
-    return res.status(400).send(error.details[0].message)
-    }
-    else {
+    if(req.body.password!=(""||null||undefined) && req.body.password===req.body.password2){
+      const {error}=await validate(user)
+      if (error){return res.status(400).send(error.details[0].message)}}
+    else{
+      const {error}=await validateUserWithoutPassword(user)
+      if (error){return res.status(400).send(error.details[0].message)}}
+    
       const userToSave = new User(user);
       let updatedUser = await User.findById(req.user._id);
       updatedUser.email = req.body.email;
@@ -127,7 +128,7 @@ else {
       }).catch((err)=>{
       return res.status(400).send(err)
       
-      })}});
+      })});
    
  
  
