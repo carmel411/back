@@ -10,11 +10,11 @@ const postSchema = new mongoose.Schema({
     minlength: 2,
     maxlength: 255
   },
-  body: {
+  postBody: {
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 65536
+    maxlength: 9999999
   },
   summary: {
     type: String,
@@ -32,7 +32,7 @@ const postSchema = new mongoose.Schema({
     type: Array,
     required: false
   },
-  postImage: {
+  imageUrl: {
     type: String,
     required: false,
     minlength: 11,
@@ -63,9 +63,9 @@ function validatePost(post) {
   const schema = Joi.object({
     name: Joi.string().min(2).max(255).required(),
     summary: Joi.string().min(2).max(255).required(),
-    body: Joi.string().min(2).max(2048).required(),
+    postBody: Joi.string().min(2).max(9999999).required(),
     author: Joi.string().min(2).max(32).required(),
-    postImage: Joi.string().min(11).max(1024),
+    imageUrl: Joi.string().min(2).max(1024),
     postNumber: Joi.string().min(3).max(9999999).required(),
     user_id: Joi.string().min(1).max(255).required(),
     views: Joi.number().required(),
@@ -73,6 +73,21 @@ function validatePost(post) {
   });
   return schema.validate(post);
 }
+
+
+function validateUpdatedPost(post) {
+  const schema = Joi.object({
+    name: Joi.string().min(2).max(255).required(),
+    summary: Joi.string().min(2).max(255).required(),
+    postBody: Joi.string().min(2).max(9999999).required(),
+    author: Joi.string().min(2).max(32).required(),
+    imageUrl: Joi.string().min(2).max(1024),
+    tags: Joi.array()
+  });
+  return schema.validate(post);
+}
+
+
 
 async function generatePostNumber(Post) {
   while (true) {
@@ -84,4 +99,5 @@ async function generatePostNumber(Post) {
 
 exports.Post = Post;
 exports.validatePost = validatePost;
+exports.validateUpdatedPost = validateUpdatedPost;
 exports.generatePostNumber = generatePostNumber

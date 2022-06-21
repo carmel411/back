@@ -16,8 +16,9 @@ var flash = require('connect-flash');
 app.use(express.static(path.join(__dirname, "app")));
 
 mongoose.connect(
-  
-  process.env.MONGODB_URI || 'mongodb://localhost/poster', 
+  // TODO: לפני העלאה לאפשר
+  // process.env.MONGODB_URI ||
+   'mongodb://localhost/poster', 
   {useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => console.log('Connected to MongoDB...'))

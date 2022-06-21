@@ -1,16 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const {User, validate, validateUserWithoutPassword } = require('../models/user');
+const {User, validate, validateUserWithoutPasswordAndUserstatus,validateUserWithoutUserstatusWithPassword2 } = require('../models/user');
 const { Post, validatePost, generatePostNumber } = require('../models/post');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const auth = require('../middleware/auth');
+const adminAuth = require('../middleware/adminAuth')
 require('dotenv').config()
 var flash = require('connect-flash');
 var app = express();
 app.use(flash());
 
 var SibApiV3Sdk = require('sib-api-v3-sdk');
+const { result } = require('lodash');
 SibApiV3Sdk.ApiClient.instance.authentications['api-key'].apiKey = process.env.SENDINBLUE_API_KEY;
 
 
@@ -19,6 +21,16 @@ router.get('/me', auth, async (req, res) => {
     const user = await User.findById(req.user._id).select('-password');
     res.send(user);
   });
+
+// get all users
+router.get('/allusers', adminAuth, async (req, res) => {
+    User.find({}).then(function (users) {
+    let result = _.map(users, user => _.pick(user, ['name', 'email', 'phone','userStatus','_id']))
+    // users.map((user)=>  _.pick(user, ['name', 'email', 'phone']))
+      res.send(result);
+      });
+     });
+
 
 // insert card to favorites
 // router.post('/:id', auth, async (req, res) => {
@@ -73,6 +85,19 @@ router.patch('/posts', auth, async (req, res) => {
  
 });
 
+// update user status
+router.patch('/status', adminAuth, async (req, res) => {
+    let user = await User.findById(req.body.id);
+    user.userStatus = req.body.newStatus;
+    user = await user.save().then(()=>{
+      res.status(200).send();
+      return
+      }).catch((err)=>{
+      return res.status(400).send(err);
+   
+  })})
+  
+
 
   // register
 router.post('/', async (req, res) => {
@@ -103,11 +128,14 @@ else {
   // update user
    router.patch('/update', auth, async (req, res) => {
     const user = _.pick(req.body, ['name','phone','avatar', 'email', 'password', 'password2'])
-    if(req.body.password!=(""||null||undefined) && req.body.password===req.body.password2){
-      const {error}=await validate(user)
+    // validate if recieve password
+    if((req.body.password!==''||null||undefined) && (req.body.password===req.body.password2)){
+      const {error}=await validateUserWithoutUserstatusWithPassword2(user)
       if (error){return res.status(400).send(error.details[0].message)}}
+    // validate without password
     else{
-      const {error}=await validateUserWithoutPassword(user)
+      const userWithoutPassword = _.pick(req.body, ['name','phone','avatar', 'email'])
+      const {error}=await validateUserWithoutPasswordAndUserstatus(userWithoutPassword)
       if (error){return res.status(400).send(error.details[0].message)}}
     
       const userToSave = new User(user);
