@@ -11,9 +11,12 @@ const path = require('path')
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 var flash = require('connect-flash');
-
+var cors = require('cors')
 
 app.use(express.static(path.join(__dirname, "app")));
+
+app.use(cors())
+
 
 mongoose.connect(
   // TODO: לפני העלאה לאפשר
