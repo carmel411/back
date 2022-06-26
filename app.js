@@ -17,7 +17,7 @@ app.use(express.static(path.join(__dirname, "app")));
 
 mongoose.connect(
   // TODO: לפני העלאה לאפשר
-  // process.env.MONGODB_URI ||
+  process.env.MONGODB_URI ||
    'mongodb://localhost/poster', 
   {useNewUrlParser: true,
   useUnifiedTopology: true
