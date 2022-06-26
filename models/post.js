@@ -37,6 +37,7 @@ const postSchema = new mongoose.Schema({
     required: false,
     minlength: 11,
     maxlength: 1024
+    
   },
   postNumber: {
     type: String,

@@ -114,7 +114,7 @@ function validateUserWithoutUserstatusWithPassword2(user) {
 function validatePosts(data) {
 
   const schema = Joi.object({
-    posts: Joi.array().min(1)
+    posts: Joi.array().min()
   });
 
   return schema.validate(data);
@@ -124,4 +124,4 @@ exports.User = User;
 exports.validate = validateUser;
 exports.validateUserWithoutPasswordAndUserstatus = validateUserWithoutPasswordAndUserstatus;
 exports.validateUserWithoutUserstatusWithPassword2 = validateUserWithoutUserstatusWithPassword2;
-// exports.validatePosts = validatePosts;
+exports.validatePosts = validatePosts;

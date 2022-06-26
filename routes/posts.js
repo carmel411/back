@@ -55,6 +55,14 @@ router.get('/allposts', async (req, res) => {
   res.send(postsArray);
 });
 
+// get latest posts
+router.get('/latest', async (req, res) => {
+  const postsArray = await Post.find({}).sort({ _id: -1 }).limit(3)
+  if (!postsArray) return res.status(404).send('The post with the given USER ID was not found.');
+  res.send(postsArray);
+});
+
+
 // get posts by tag
 router.get('/searchtag', async (req, res) => {
   const findTag = req.query.tag
@@ -67,18 +75,16 @@ router.get('/searchtag', async (req, res) => {
 // get posts by query
 router.get('/searchquery', async (req, res) => {
   const findQuery = req.query.query
-  
   const postsArray = await Post.find({ $or: [
     {"name" : {$regex : findQuery}},
     {"summary" : {$regex : findQuery}},
     {"postBody" : {$regex : findQuery}},
     {"author" : {$regex : findQuery}},
     {"tags" : {$regex : findQuery}}
-  ],function(err,docs) { 
-  }
-})
-  if (!postsArray) return res.status(404).send('The post with the given USER ID was not found.');
-  res.send(postsArray);
+  ],function(err,docs) {}
+}) 
+  if (!postsArray) return res.status(404).send('The post not found.');
+  if(postsArray){res.send(postsArray)};
 });
 
 
@@ -118,7 +124,7 @@ router.post('/', writerAuth, async (req, res) => {
     author: req.body.author,
     summary: req.body.summary,
     tags: req.body.tags,
-    postImage: req.body.postImage,
+    imageUrl: req.body.imageUrl,
     postNumber: await generatePostNumber(Post),
     user_id: req.user._id
   });

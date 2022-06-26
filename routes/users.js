@@ -69,19 +69,16 @@ router.get('/posts', auth, async (req, res) => {
  
 });
 
-// update user posts list
+// update user favorite list
 router.patch('/posts', auth, async (req, res) => {
-//  console.log(req.body.posts);
+ console.log(req.body.posts);
   const { error } = validatePosts(req.body);
   if (error) res.status(400).send(error.details[0].message);
- 
-  const posts = await getPosts(req.body.posts);
-  if (posts.length != req.body.posts.length) res.status(400).send("Post numbers don't match");
  
   let user = await User.findById(req.user._id);
   user.posts = req.body.posts;
   user = await user.save();
-  res.send(user);
+  res.status(200).send(user);
  
 });
 
