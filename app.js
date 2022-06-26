@@ -15,17 +15,24 @@ var cors = require('cors')
 
 app.use(express.static(path.join(__dirname, "app")));
 
-app.use(cors())
+// app.use(cors())
+app.use(cors({
+  methods: 'GET,POST,PATCH,DELETE,OPTIONS',
+  optionsSuccessStatus: 200,
+  origin: 'https://readandgrow.web.app'
+}));
+app.options('*', cors());
 
-app.use(function (req, res, next) {
 
-  res.setHeader('Access-Control-Allow-Origin', 'https://readandgrow.web.app/');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  res.setHeader('Access-Control-Allow-Credentials', true);
+// app.use(function (req, res, next) {
+
+//   res.setHeader('Access-Control-Allow-Origin', 'https://readandgrow.web.app/');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+//   res.setHeader('Access-Control-Allow-Credentials', true);
   
-  next();
-  });
+//   next();
+//   });
 
 mongoose.connect(
   // TODO: לפני העלאה לאפשר
