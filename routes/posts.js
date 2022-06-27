@@ -1,3 +1,6 @@
+const jwt = require('jsonwebtoken');
+const config = require('config');
+require('dotenv').config();
 const express = require('express');
 const _ = require('lodash');
 const {
@@ -90,11 +93,25 @@ router.get('/searchquery', async (req, res) => {
 
 // get post by ID
 router.get('/:id', async (req, res) => {
-  const post = await Post.findOne({
+  let post = await Post.findOne({
     _id: req.params.id
   })
   if (!post) return res.status(404).send('The post with the given ID was not found.');
   res.send(post)
+  // update views
+  const token = req.header('x-auth-token');
+  if(token){
+    const decoded = jwt.verify(token, config.get('jwtKey'));
+    req.user = decoded;
+    if(req.user.userStatus!==2 && req.user._id!==post.user_id){
+      post.views = post.views+1;
+      post = await post.save();
+    }
+  }else{
+    post.views = post.views+1;
+    post = await post.save();
+  
+  }
 });
 
 

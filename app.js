@@ -24,20 +24,8 @@ app.use(cors({
 app.options('*', cors());
 
 
-// app.use(function (req, res, next) {
-
-//   res.setHeader('Access-Control-Allow-Origin', 'https://readandgrow.web.app/');
-//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-//   res.setHeader('Access-Control-Allow-Credentials', true);
-  
-//   next();
-//   });
-
 mongoose.connect(
-  // TODO: לפני העלאה לאפשר
-  process.env.MONGODB_URI ||
-   'mongodb://localhost/poster', 
+  'mongodb://localhost/poster' || process.env.MONGODB_URI, 
   {useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => console.log('Connected to MongoDB...'))

@@ -3,6 +3,7 @@ const config = require('config');
 require('dotenv').config();
 
 module.exports = (req, res, next) => {
+  console.log("writerauth active")
   const token = req.header('x-auth-token');
   if (!token) return res.status(401).send('לא סופק אסימון גישה');
   try {
