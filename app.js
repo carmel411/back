@@ -25,7 +25,7 @@ app.options('*', cors());
 
 
 mongoose.connect(
-  'mongodb://localhost/poster' || process.env.MONGODB_URI, 
+  process.env.MONGODB_URI || 'mongodb://localhost/poster' , 
   {useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => console.log('Connected to MongoDB...'))
