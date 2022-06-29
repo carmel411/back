@@ -14,15 +14,25 @@ const writerAuth = require('../middleware/writerAuth.js')
 const router = express.Router();
 
 // delete post
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', writerAuth, async (req, res) => {
   // if (!req.user.userStatus) return res.status(403).send('You need userStatus pemission to perform this action.');
+  if(req.user.userStatus===2){
+    const post = await Post.findOneAndRemove({
+      _id: req.params.id,
+    });  
+    if (!post) return res.status(404).send('The post with the given ID was not found.');
+  res.send(post);
+  }
+  if(req.user.userStatus===1){
   const post = await Post.findOneAndRemove({
     _id: req.params.id,
     user_id: req.user._id
   });
   if (!post) return res.status(404).send('The post with the given ID was not found.');
   res.send(post);
-});
+  
+}});
+
 // update post
 router.put('/:id', writerAuth, async (req, res) => {
   const {error} = validateUpdatedPost(req.body);
