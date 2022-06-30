@@ -21,6 +21,7 @@ app.use(cors({
   optionsSuccessStatus: 200,
   origin: 'https://readandgrow.web.app'
 }));
+
 app.options('*', cors());
 
 

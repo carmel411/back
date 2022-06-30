@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {User, validate, validateUserWithoutPasswordAndUserstatus,validateUserWithoutUserstatusWithPassword2 } = require('../models/user');
+const {User, validate, validateUserWithoutPasswordAndUserstatus,validateUserWithoutUserstatusWithPassword2 ,validatePosts} = require('../models/user');
 const { Post, validatePost, generatePostNumber } = require('../models/post');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
@@ -49,38 +49,35 @@ router.get('/allusers', adminAuth, async (req, res) => {
 
 
  
-const getPosts = async (postsArray) => {
+// const getPosts = async (postsArray) => {
   
-  const posts = await Post.find({ "postNumber": { $in: postsArray } });
-  return posts;
-};
+//   const posts = await Post.find({ "postNumber": { $in: postsArray } });
+//   return posts;
+// };
  
-// get liked posts list by user
-router.get('/posts', auth, async (req, res) => {
+// // get liked posts list by user
+// router.get('/posts', auth, async (req, res) => {
  
-  if (!req.query.numbers) res.status(400).send('Missing numbers data');
+//   if (!req.query.numbers) res.status(400).send('Missing numbers data');
  
-  let data = {};
-  data.posts = req.query.numbers.split(",");
+//   let data = {};
+//   data.posts = req.query.numbers.split(",");
  
-  const posts = await getPosts(data.posts);
-  res.send(posts);
-  // res.send(data);
+//   const posts = await getPosts(data.posts);
+//   res.send(posts);
+//   // res.send(data);
  
-});
+// });
 
 // update user favorite list
 router.patch('/posts', auth, async (req, res) => {
- console.log(req.body.posts);
-  const { error } = validatePosts(req.body);
-  if (error) res.status(400).send(error.details[0].message);
- 
   let user = await User.findById(req.user._id);
-  user.posts = req.body.posts;
-  user = await user.save();
-  res.status(200).send(user);
- 
-});
+  user.posts = req.body;
+  user = await user.save().then(()=>{
+    res.status(200).send(user);
+    }).catch((err)=>{
+    res.status(400).send(err);
+  })});
 
 // update user status
 router.patch('/status', adminAuth, async (req, res) => {
@@ -98,7 +95,6 @@ router.patch('/status', adminAuth, async (req, res) => {
 
   // register
 router.post('/', async (req, res) => {
-console.log("Someone `try to register");
 const user = _.pick(req.body, ['name', 'email', 'password', 'userStatus', 'posts'])
 const {error}=await validate(user)
 if (error){
@@ -113,6 +109,7 @@ else {
     userToSave.favorites = [];
     userToSave.save().then(()=>{
         let resInfo = (_.pick(userToSave, ['_id', 'name', 'email']));
+        console.log("new register" + resInfo);
         res.status(200).send(resInfo);
         return
         }).catch((err)=>{
@@ -184,7 +181,6 @@ router.post('/forget', async (req, res) => {
       "to":[{"email": req.body.email}]
   
   }).then(function(data) {
-   console.log(data);
   mailData = data;
   }, function(error) {
    console.error(error);

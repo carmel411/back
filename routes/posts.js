@@ -12,6 +12,8 @@ const {
 const auth = require('../middleware/auth');
 const writerAuth = require('../middleware/writerAuth.js')
 const router = express.Router();
+const {User} = require('../models/user');
+
 
 // delete post
 router.delete('/:id', writerAuth, async (req, res) => {
@@ -63,7 +65,7 @@ router.put('/:id', writerAuth, async (req, res) => {
 
 // get all posts
 router.get('/allposts', async (req, res) => {
-  const postsArray = await Post.find({});
+  const postsArray = await Post.find();
   if (!postsArray) return res.status(404).send('The post with the given USER ID was not found.');
   res.send(postsArray);
 });
@@ -98,6 +100,15 @@ router.get('/searchquery', async (req, res) => {
 }) 
   if (!postsArray) return res.status(404).send('The post not found.');
   if(postsArray){res.send(postsArray)};
+});
+
+// get posts by favorites
+router.get('/favorites',auth, async (req, res) => {
+  const user = await User.findById(req.user._id);
+  
+  const postsArray = await Post.find({'_id': { $in: user.posts}});
+  if (!postsArray) return res.status(404).send('The post with the given USER ID was not found.');
+  res.send(postsArray);
 });
 
 
