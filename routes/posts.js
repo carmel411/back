@@ -35,6 +35,16 @@ router.delete('/:id', writerAuth, async (req, res) => {
   
 }});
 
+// push comment to post
+router.put('/comment/:id', async (req, res) => {
+    let post = await Post.findById(req.params.id);
+    post.comments.push(req.body)
+    await post.save()
+    res.send(post)
+    
+});
+
+
 // update post
 router.put('/:id', writerAuth, async (req, res) => {
   const {error} = validateUpdatedPost(req.body);
@@ -46,7 +56,7 @@ router.put('/:id', writerAuth, async (req, res) => {
     }, req.body)
     if (!post) return res.status(404).send('The post with the given ID was not found.');
     post = await Post.findOne({
-      postNumber: req.params.id
+      _id: req.params.id
     });
     res.send(post)} else
     {
@@ -57,7 +67,7 @@ router.put('/:id', writerAuth, async (req, res) => {
     }, req.body);
     if (!post) return res.status(404).send('The post with the given ID was not found.');
     post = await Post.findOne({
-      postNumber: req.params.id
+      _id: req.params.id
     });
     res.send(post)
   }
@@ -169,5 +179,7 @@ router.post('/', writerAuth, async (req, res) => {
   post = await post.save();
   res.send(post);
 });
+
+
 
 module.exports = router;

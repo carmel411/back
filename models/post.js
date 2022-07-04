@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
 const _ = require('lodash');
+const { array } = require('joi');
 
 
 const postSchema = new mongoose.Schema({
@@ -56,6 +57,11 @@ const postSchema = new mongoose.Schema({
     type: Number,
     required: true,
     default: 0
+  },
+  comments:{
+    type: Array,
+    required: true,
+    default: []
   }
 });
 const Post = mongoose.model('Post', postSchema);
