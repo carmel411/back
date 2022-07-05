@@ -37,7 +37,7 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: false,
     minlength: 11,
-    maxlength: 1024
+    maxlength: 4096
     
   },
   postNumber: {
@@ -72,7 +72,7 @@ function validatePost(post) {
     summary: Joi.string().min(2).max(255).required(),
     postBody: Joi.string().min(2).max(9999999).required(),
     author: Joi.string().min(2).max(32).required(),
-    imageUrl: Joi.string().min(2).max(1024),
+    imageUrl: Joi.string().min(2).max(4096),
     postNumber: Joi.string().min(3).max(9999999).required(),
     user_id: Joi.string().min(1).max(255).required(),
     views: Joi.number().required(),
@@ -88,8 +88,9 @@ function validateUpdatedPost(post) {
     summary: Joi.string().min(2).max(255).required(),
     postBody: Joi.string().min(2).max(9999999).required(),
     author: Joi.string().min(2).max(32).required(),
-    imageUrl: Joi.string().min(2).max(1024),
-    tags: Joi.array()
+    imageUrl: Joi.string().min(2).max(4096),
+    tags: Joi.array(),
+    comments: Joi.array()
   });
   return schema.validate(post);
 }
