@@ -17,10 +17,11 @@ app.use(express.static(path.join(__dirname, "app")));
 
 // app.use(cors())
 app.use(cors({
-  methods: 'GET,POST,PATCH,DELETE,OPTIONS',
+  methods: 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
   optionsSuccessStatus: 200,
   origin: 'https://readandgrow.web.app'
 }));
+
 
 app.options('*', cors());
 
