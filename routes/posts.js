@@ -75,14 +75,14 @@ router.put('/:id', writerAuth, async (req, res) => {
 
 // get all posts
 router.get('/allposts', async (req, res) => {
-  const postsArray = await Post.find();
+    const postsArray = await Post.find().select('-postBody'); 
   if (!postsArray) return res.status(404).send('The post with the given USER ID was not found.');
   res.send(postsArray);
 });
 
 // get latest posts
 router.get('/latest', async (req, res) => {
-  const postsArray = await Post.find({}).sort({ _id: -1 }).limit(3)
+  const postsArray = await Post.find({}).sort({ _id: -1 }).limit(3).select('-postBody')
   if (!postsArray) return res.status(404).send('The post with the given USER ID was not found.');
   res.send(postsArray);
 });
@@ -92,7 +92,7 @@ router.get('/latest', async (req, res) => {
 router.get('/searchtag', async (req, res) => {
   const findTag = req.query.tag
   
-  const postsArray = await Post.find({tags: findTag})
+  const postsArray = await Post.find({tags: findTag}).select('-postBody')
   if (!postsArray) return res.status(404).send('The post with the given USER ID was not found.');
   res.send(postsArray);
 });
@@ -107,14 +107,14 @@ router.get('/searchquery', async (req, res) => {
     {"author" : {$regex : findQuery}},
     {"tags" : {$regex : findQuery}}
   ],function(err,docs) {}
-}) 
+}).select('-postBody') 
   if (!postsArray) return res.status(404).send('The post not found.');
   if(postsArray){res.send(postsArray)};
 });
 
 // get posts by favorites
 router.get('/favorites',auth, async (req, res) => {
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user._id).select('-postBody');
   
   const postsArray = await Post.find({'_id': { $in: user.posts}});
   if (!postsArray) return res.status(404).send('The post with the given USER ID was not found.');

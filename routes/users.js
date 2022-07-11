@@ -32,43 +32,6 @@ router.get('/allusers', adminAuth, async (req, res) => {
      });
 
 
-// insert card to favorites
-// router.post('/:id', auth, async (req, res) => {
-// const { error } = validateCard(req.body);
-// if (error) return res.status(400).send(error.details[0].message);
-// let card = req.params.id;
-//   const newFavorite = await User.findOneAndUpdate({_id: req.user._id }, {$push: {favorites: card }} );
-// const newFavorite = await User.findAndModify({
-//   query:{_id: req.user._id},
-//   update:{$push: {card}}})
-
-//   if (!newFavorite) return res.status(404).send('error.');
-//   updatedFavorites =  User.findById(req.user._id).select('favorites');
-//   res.send(updatedFavorites);
-// });
-
-
- 
-// const getPosts = async (postsArray) => {
-  
-//   const posts = await Post.find({ "postNumber": { $in: postsArray } });
-//   return posts;
-// };
- 
-// // get liked posts list by user
-// router.get('/posts', auth, async (req, res) => {
- 
-//   if (!req.query.numbers) res.status(400).send('Missing numbers data');
- 
-//   let data = {};
-//   data.posts = req.query.numbers.split(",");
- 
-//   const posts = await getPosts(data.posts);
-//   res.send(posts);
-//   // res.send(data);
- 
-// });
-
 // update user favorite list
 router.patch('/posts', auth, async (req, res) => {
   let user = await User.findById(req.user._id);
@@ -95,6 +58,7 @@ router.patch('/status', adminAuth, async (req, res) => {
 
   // register
 router.post('/', async (req, res) => {
+console.log(req.body.email + " trying to register " + new Date())
 const user = _.pick(req.body, ['name', 'email', 'password', 'userStatus', 'posts'])
 const {error}=await validate(user)
 if (error){
@@ -109,7 +73,7 @@ else {
     userToSave.favorites = [];
     userToSave.save().then(()=>{
         let resInfo = (_.pick(userToSave, ['_id', 'name', 'email']));
-        console.log("new register" + resInfo);
+        console.log("new register " + new Date() + " " + resInfo);
         res.status(200).send(resInfo);
         return
         }).catch((err)=>{
@@ -163,7 +127,9 @@ else {
 
 //   forget password
 router.post('/forget', async (req, res) => {
- let errorMessage = "";
+  console.log(req.body.email + " forget password " + new Date())
+
+  let errorMessage = "";
   const randomPassword = Math.random().toString(36).slice(-8);
   const salt = await bcrypt.genSalt(10);
   const bcryptPassword = await bcrypt.hash(randomPassword, salt);
