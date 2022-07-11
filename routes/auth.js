@@ -7,7 +7,7 @@ const router = express.Router();
 
 
 // auth/login
-router.post('/', async (req, res) => {
+router.put('/', async (req, res) => {
   console.log(req.body.email + " trying to connect" + new Date())
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
