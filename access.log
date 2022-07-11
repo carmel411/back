@@ -5067,3 +5067,5 @@
 ::1 - - [11/Jul/2022:18:27:37 +0000] "GET /api/users/me HTTP/1.1" 304 - "http://localhost:4200/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
 ::1 - - [11/Jul/2022:18:28:54 +0000] "PUT /api/users/forget HTTP/1.1" 200 0 "http://localhost:4200/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
 ::1 - - [11/Jul/2022:18:36:50 +0000] "PUT /api/users/forget HTTP/1.1" 200 0 "http://localhost:4200/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
+::1 - - [11/Jul/2022:18:39:25 +0000] "GET /api/posts/latest HTTP/1.1" 304 - "http://localhost:4200/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
+::1 - - [11/Jul/2022:18:51:34 +0000] "POST /api/users/forget HTTP/1.1" 200 0 "http://localhost:4200/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
