@@ -57,7 +57,7 @@ router.patch('/status', adminAuth, async (req, res) => {
 
 
   // register
-router.put('/', async (req, res) => {
+router.post('/', async (req, res) => {
 console.log(req.body.email + " trying to register " + new Date())
 const user = _.pick(req.body, ['name', 'email', 'password', 'userStatus', 'posts'])
 const {error}=await validate(user)
