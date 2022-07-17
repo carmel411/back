@@ -121,6 +121,15 @@ router.get('/favorites',auth, async (req, res) => {
   res.send(postsArray);
 });
 
+// get all tags
+router.get('/tags', async (req, res) => {
+  const data = await Post.find().select('tags');
+  let arrayList = []
+  data.map(post => post.tags.map(tag => arrayList.push(tag)));
+  const uniqueTags = [...new Set(arrayList)]
+res.send(uniqueTags);
+});
+
 
 // get post by ID
 router.get('/:id', async (req, res) => {
@@ -179,6 +188,7 @@ router.post('/', writerAuth, async (req, res) => {
   post = await post.save();
   res.send(post);
 });
+
 
 
 
